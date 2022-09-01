@@ -1,17 +1,23 @@
 package com.project.demo.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "book_checkout")
 @Entity
 public class BookCheckout {
 
+    @Column(name="bookName")
     String bookName;
 
+    @Column(name="ISBN")
     @Id
     String ISBN;
 
-    String date;
+    @Column(name="checkoutTime")
+    String checkoutTime;
 
     public String getBookName() {
         return bookName;
@@ -30,11 +36,11 @@ public class BookCheckout {
     }
 
     public String getDate() {
-        return date;
+        return checkoutTime;
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.checkoutTime = date;
     }
 
     @Override
@@ -42,7 +48,7 @@ public class BookCheckout {
         return "BookCheckout{" +
                 "bookName='" + bookName + '\'' +
                 ", ISBN='" + ISBN + '\'' +
-                ", date='" + date + '\'' +
+                ", date='" + checkoutTime + '\'' +
                 '}';
     }
 }
