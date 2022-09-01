@@ -7,6 +7,8 @@ import javax.persistence.Id;
 public class User {
 
     @Id
+    int userId;
+
     String username;
 
     String password;
@@ -37,10 +39,19 @@ public class User {
         this.type = type;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "username='" + username + '\'' +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", type='" + type + '\'' +
                 '}';
