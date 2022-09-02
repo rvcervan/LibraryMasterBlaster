@@ -1,6 +1,7 @@
 package com.project.demo.controllers;
 
 import com.project.demo.entities.BookCatalog;
+import com.project.demo.entities.BookCheckout;
 import com.project.demo.entities.User;
 import com.project.demo.services.BookCatalogService;
 import com.project.demo.services.BookCheckoutService;
@@ -36,7 +37,7 @@ public class AdminController {
         userService.deleteUser(id);
     }
 
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("/deleteAllUsers")
     @ResponseBody
     public void deleteAllUsers(){
         userService.deleteAll();
@@ -62,10 +63,36 @@ public class AdminController {
         bookCatalogService.deleteBookCatalog(id);
     }
 
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("/deleteAllBookCatalogs")
     @ResponseBody
     public void deleteAllBookCatalogs(){
         bookCatalogService.deleteAll();
+    }
+
+    @RequestMapping("/showBookCheckouts")
+    @ResponseBody
+    public List<BookCheckout> getBookCheckouts(){
+        List<BookCheckout> bList = bookCheckoutService.getAll();
+        return bList;
+    }
+
+    @PostMapping(value = "/createBookCheckout")
+    @ResponseBody
+    public BookCheckout createBookCheckout(@RequestBody BookCheckout b){
+        BookCheckout BookCheckoutResponse = bookCheckoutService.createBookCheckout(b);
+        return BookCheckoutResponse;
+    }
+
+    @DeleteMapping("/deleteBookCheckout/{id}")
+    @ResponseBody
+    public void deleteBookCheckout(@PathVariable String id){
+        bookCheckoutService.deleteBookCheckout(id);
+    }
+
+    @DeleteMapping("/deleteAllBookCheckout")
+    @ResponseBody
+    public void deleteAll(){
+        bookCheckoutService.deleteAll();
     }
 }
 
