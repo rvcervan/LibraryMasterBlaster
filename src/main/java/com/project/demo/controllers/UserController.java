@@ -3,6 +3,8 @@ package com.project.demo.controllers;
 import com.project.demo.entities.User;
 import com.project.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,16 +21,42 @@ public class UserController {
 
     @RequestMapping("/showUsers")
     @ResponseBody
-    public List<User> getUsers(){ //Who calls this, admins?
-        List<User> uList = service.getAll();
-        return uList;
+    public ResponseEntity getUsers(){ //Who calls this, admins?
+        if(!checkAuth())
+        {
+            return new ResponseEntity<>( "Not Authorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        try{
+            List<User> userlist = service.getAll();
+            return new ResponseEntity<>( userlist, HttpStatus.OK);
+        }catch(Exception ex){
+            String errorMessage;
+            errorMessage = ex + " <== error";
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping("/getUser/{id}")
     @ResponseBody
-    public User getUser(@PathVariable int id){
-        User u = service.getUser(id);
-        return u;
+    public ResponseEntity getUser(@PathVariable int id){
+        if(!checkAuth())
+        {
+            return new ResponseEntity<>( "Not Authorized", HttpStatus.UNAUTHORIZED);
+        }
+
+        try{
+            User u = service.getUser(id);
+            if(u.getUsername().equals(returnUser()))
+            {
+                return new ResponseEntity<>( u, HttpStatus.OK);
+            }
+            else {
+                throw new Exception();
+            }
+        }catch(Exception ex){
+            return new ResponseEntity<>("Wrong ID", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping(value = "/createUser")
@@ -40,21 +68,49 @@ public class UserController {
 
     @PutMapping(value = "/updateUser/{id}")
     @ResponseBody
-    public User updateUser(@RequestBody User u, @PathVariable int id){
-        User userResponse = service.updateUser(u, id);
-        return userResponse;
+    public ResponseEntity updateUser(@RequestBody User u, @PathVariable int id){
+        try{
+            if(u.getUsername().equals(returnUser()))
+            {
+                User userResponse = service.updateUser(u, id);
+                return new ResponseEntity<>( userResponse, HttpStatus.OK);
+            }
+            else {
+                throw new Exception();
+            }
+        }catch(Exception ex){
+            return new ResponseEntity<>("Wrong ID", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @DeleteMapping("/deleteUser/{id}")
     @ResponseBody
-    public void deleteUser(@PathVariable int id){
-        service.deleteUser(id);
+    public ResponseEntity deleteUser(@PathVariable int id){
+        try{
+            User u = service.getUser(id);
+            if(u.getUsername().equals(returnUser()))
+            {
+                service.deleteUser(id);
+                return new ResponseEntity<>( "deleted", HttpStatus.OK);
+            }
+            else {
+                throw new Exception();
+            }
+        }catch(Exception ex){
+            return new ResponseEntity<>("Wrong ID", HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
-    @DeleteMapping("/deleteAll")
-    @ResponseBody
-    public void deleteAll(){
-        service.deleteAll();
+
+    public Boolean checkAuth()
+    {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equalsIgnoreCase("[user]");
+    }
+
+    public String returnUser()
+    {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
 }
