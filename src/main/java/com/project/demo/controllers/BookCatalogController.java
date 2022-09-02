@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/catalog")
@@ -22,6 +23,39 @@ public class BookCatalogController {
     public List<BookCatalog> getBookCatalogs(){ //Who calls this, admins?
         List<BookCatalog> bList = service.getAll();
         return bList;
+    }
+
+    //search books by title
+    @RequestMapping("/title/{key}")
+    @ResponseBody
+    public List<BookCatalog> getBooksByTitle(@PathVariable String key){
+        List<BookCatalog> bList = service.getAll();
+        List<BookCatalog> filtered = bList.stream()
+                .filter(t -> t.getBookName().contains(key))
+                .collect(Collectors.toList());
+        return filtered;
+
+    }
+
+    @RequestMapping("/author/{key}")
+    @ResponseBody
+    public List<BookCatalog> getBooksByAuthor(@PathVariable String key){
+        List<BookCatalog> bList = service.getAll();
+        List<BookCatalog> filtered = bList.stream()
+                .filter(t -> t.getAuthor().contains(key))
+                .collect(Collectors.toList());
+        return filtered;
+    }
+
+    @RequestMapping("/ISBN/{key}")
+    @ResponseBody
+    public List<BookCatalog> getBooksByISBN(@PathVariable String key){
+        List<BookCatalog> bList = service.getAll();
+        List<BookCatalog> filtered = bList.stream()
+                .filter(t -> t.getISBN().contains(key))
+                .collect(Collectors.toList());
+        return filtered;
+
     }
 
     @RequestMapping("/getBookCatalog/{id}")
@@ -51,7 +85,7 @@ public class BookCatalogController {
         service.deleteBookCatalog(id);
     }
 
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping(path = "/deleteAll")
     @ResponseBody
     public void deleteAll(){
         service.deleteAll();

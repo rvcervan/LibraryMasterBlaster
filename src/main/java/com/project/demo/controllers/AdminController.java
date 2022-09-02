@@ -5,6 +5,7 @@ import com.project.demo.entities.User;
 import com.project.demo.services.BookCatalogService;
 import com.project.demo.services.BookCheckoutService;
 import com.project.demo.services.UserService;
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,10 +63,12 @@ public class AdminController {
         bookCatalogService.deleteBookCatalog(id);
     }
 
-    @DeleteMapping("/deleteAll")
-    @ResponseBody
-    public void deleteAllBookCatalogs(){
-        bookCatalogService.deleteAll();
-    }
+
+    //TODO fix this somehow, throws error
+//    @DeleteMapping(value = "/deleteAll")
+//    @ResponseBody
+//    public void deleteAllBookCatalogs(){
+//        bookCatalogService.deleteAll();
+//    }
 }
 
