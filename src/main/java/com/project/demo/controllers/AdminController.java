@@ -2,9 +2,11 @@ package com.project.demo.controllers;
 
 import com.project.demo.entities.BookCatalog;
 import com.project.demo.entities.BookCheckout;
+import com.project.demo.entities.Membership;
 import com.project.demo.entities.User;
 import com.project.demo.services.BookCatalogService;
 import com.project.demo.services.BookCheckoutService;
+import com.project.demo.services.MembershipService;
 import com.project.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,9 @@ public class AdminController {
 
     @Autowired
     BookCheckoutService bookCheckoutService;
+
+    @Autowired
+    MembershipService membershipService;
 
     @RequestMapping("/showUsers")
     @ResponseBody
@@ -94,5 +99,26 @@ public class AdminController {
     public void deleteAll(){
         bookCheckoutService.deleteAll();
     }
+
+    @PostMapping("/createMembership")
+    @ResponseBody
+    public Membership createMembership(@RequestBody Membership membership) {
+        Membership membershipResponse = membershipService.createMembership(membership);
+        return membershipResponse;
+    }
+
+    @PutMapping("/changeMembershipClass/{id}")
+    @ResponseBody
+    public Membership changeMembershipClass(@RequestBody Membership membership, @PathVariable int id) {
+        Membership m = membershipService.changeMembershipClass(membership, id);
+        return m;
+    }
+
+    @DeleteMapping("/deleteMembership/{id}")
+    @ResponseBody
+    public void deleteMembership(@PathVariable int id) {
+        membershipService.deleteMembership(id);
+    }
+
 }
 
