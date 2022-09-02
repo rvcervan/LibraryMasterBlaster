@@ -13,7 +13,7 @@ public interface BookCheckoutService {
 
     BookCheckout createBookCheckout(BookCheckout b);
 
-    BookCheckout updateBookCheckout(BookCheckout b, String id);
+    BookCheckout updateBookCheckout(String id);
 
     void deleteBookCheckout(String id);
 

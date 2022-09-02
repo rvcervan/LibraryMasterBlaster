@@ -22,6 +22,7 @@ public class BookCatalogServiceImpl implements BookCatalogService {
 
     @Override
     public BookCatalog getBookCatalog(String id){
+        System.out.println(":sd");
         BookCatalog b = repo.findById(id).get();
         return b;
     }

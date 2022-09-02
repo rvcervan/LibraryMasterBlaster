@@ -9,6 +9,8 @@ import javax.persistence.Table;
 @Entity
 public class BookCheckout {
 
+    String username;
+
     @Column(name="bookName")
     String bookName;
 
@@ -18,6 +20,8 @@ public class BookCheckout {
 
     @Column(name="checkoutTime")
     String checkoutTime;
+
+    String checkoutDue;
 
     public String getBookName() {
         return bookName;
@@ -43,12 +47,30 @@ public class BookCheckout {
         this.checkoutTime = date;
     }
 
+    public String getCheckoutDue() {
+        return checkoutDue;
+    }
+
+    public void setCheckoutDue(String checkoutDue) {
+        this.checkoutDue = checkoutDue;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return "BookCheckout{" +
-                "bookName='" + bookName + '\'' +
+                "username='" + username + '\'' +
+                ", bookName='" + bookName + '\'' +
                 ", ISBN='" + ISBN + '\'' +
-                ", date='" + checkoutTime + '\'' +
+                ", checkoutTime='" + checkoutTime + '\'' +
+                ", checkoutDue='" + checkoutDue + '\'' +
                 '}';
     }
 }

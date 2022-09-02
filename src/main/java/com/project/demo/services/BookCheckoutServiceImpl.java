@@ -4,8 +4,12 @@ package com.project.demo.services;
 import com.project.demo.entities.BookCheckout;
 import com.project.demo.repositories.BookCheckoutRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -28,14 +32,37 @@ public class BookCheckoutServiceImpl implements BookCheckoutService {
 
     @Override
     public BookCheckout createBookCheckout(BookCheckout b){
+
+        System.out.println("hello");
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        b.setUsername(auth.getName());
+
+        LocalDate dateObj = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String date = dateObj.format(formatter);
+        b.setDate(date);
+
+        dateObj = dateObj.plusDays(14);
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        date = dateObj.format(formatter);
+
+        b.setCheckoutDue(date);
+
         BookCheckout book = repo.save(b);
         return book;
     }
 
     @Override
-    public BookCheckout updateBookCheckout(BookCheckout b, String id){
+    public BookCheckout updateBookCheckout(String id){
         BookCheckout book = repo.findById(id).get();
-        book.setDate(b.getDate());
+
+        LocalDate dateObj = LocalDate.now();
+        dateObj = dateObj.plusDays(7);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String date = dateObj.format(formatter);
+        book.setCheckoutDue(date);
+
         repo.save(book);
         return book;
     }
