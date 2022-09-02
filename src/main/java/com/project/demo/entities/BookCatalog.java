@@ -15,6 +15,8 @@ public class BookCatalog {
 
     int instock;
 
+    String author;
+
     public String getBookName() {
         return bookName;
     }
@@ -39,12 +41,21 @@ public class BookCatalog {
         this.instock = instock;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     @Override
     public String toString() {
         return "BookCatalog{" +
                 "bookName='" + bookName + '\'' +
                 ", ISBN='" + ISBN + '\'' +
                 ", instock=" + instock +
+                ", author='" + author + '\'' +
                 '}';
     }
 }
