@@ -21,11 +21,7 @@ public class UserController {
 
     @RequestMapping("/showUsers")
     @ResponseBody
-    public ResponseEntity getUsers(){ //Who calls this, admins?
-        if(!checkAuth())
-        {
-            return new ResponseEntity<>( "Not Authorized", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity getUsers(){
 
         try{
             List<User> userlist = service.getAll();
@@ -40,10 +36,6 @@ public class UserController {
     @RequestMapping("/getUser/{id}")
     @ResponseBody
     public ResponseEntity getUser(@PathVariable int id){
-        if(!checkAuth())
-        {
-            return new ResponseEntity<>( "Not Authorized", HttpStatus.UNAUTHORIZED);
-        }
 
         try{
             User u = service.getUser(id);
@@ -70,7 +62,8 @@ public class UserController {
     @ResponseBody
     public ResponseEntity updateUser(@RequestBody User u, @PathVariable int id){
         try{
-            if(u.getUsername().equals(returnUser()))
+            User user = service.getUser(id);
+            if(user.getUsername().equals(returnUser()))
             {
                 User userResponse = service.updateUser(u, id);
                 return new ResponseEntity<>( userResponse, HttpStatus.OK);
@@ -102,11 +95,7 @@ public class UserController {
 
     }
 
-
-    public Boolean checkAuth()
-    {
-        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equalsIgnoreCase("[user]");
-    }
+    
 
     public String returnUser()
     {
